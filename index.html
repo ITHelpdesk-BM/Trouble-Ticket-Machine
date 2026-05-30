@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trouble Ticket Machine</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
+        #ticket-log { height: 400px; overflow-y: scroll; border: 1px solid #333; padding: 10px; }
+        .ticket { border-bottom: 1px solid #222; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>TROUBLE TICKET MACHINE - LIVE MONITOR</h1>
+    <div id="ticket-log"></div>
+
+    <script>
+        const techs = ["DSL (Network Tech)", "HDD (Firmware Tech)", "SSR (Software Developer)"];
+        const statuses = ["Dispatched", "Enroute", "Onsite Work", "In Progress", "Complete", "Pending", "Cleared"];
+        const log = document.getElementById('ticket-log');
+
+        function createTicket() {
+            const ticketId = "TK-" + Math.floor(Math.random() * 10000);
+            const tech = techs[Math.floor(Math.random() * techs.length)];
+            let statusIndex = 0;
+
+            const entry = document.createElement('div');
+            entry.className = 'ticket';
+            entry.innerHTML = `[${ticketId}] Assigned to ${tech} - Status: Initialized`;
+            log.prepend(entry);
+
+            const interval = setInterval(() => {
+                if (statusIndex < statuses.length) {
+                    entry.innerHTML = `[${ticketId}] Assigned to ${tech} - Status: ${statuses[statusIndex]}`;
+                    statusIndex++;
+                } else {
+                    clearInterval(interval);
+                    entry.style.color = "yellow";
+                }
+            }, 5000); // Updates status every 5 seconds
+        }
+
+        setInterval(createTicket, 10000); // New ticket every 10 seconds
+    </script>
+</body>
+</html>
