@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive ITSM Console</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #000; color: #0f0; padding: 20px; }
+        #log { height: 500px; overflow-y: scroll; border: 1px solid #333; padding: 15px; background: #111; }
+        .ticket-card { border: 1px solid #333; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .ticket-card:hover { background: #222; border-color: #0f0; }
+        .status { color: #fff; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>INTERACTIVE ITSM CONSOLE</h1>
+    <p>Click any ticket to advance its status or resolve it.</p>
+    <div id="log"></div>
+
+    <script>
+        const scenarios = [
+            { issue: "Network Timeout", cause: "Router Loop", tech: "Network Tech" },
+            { issue: "Hard Drive Error", cause: "Bad Sector", tech: "Firmware Tech" },
+            { issue: "App Crash", cause: "Memory Leak", tech: "Software Developer" }
+        ];
+
+        function createTicket() {
+            const ticket = document.createElement('div');
+            ticket.className = 'ticket-card';
+            ticket.dataset.status = "Dispatched";
+            
+            const data = scenarios[Math.floor(Math.random() * scenarios.length)];
+            ticket.innerHTML = `<strong>Ticket #${Math.floor(Math.random()*9000)}</strong><br>
+                                Issue: ${data.issue}<br>
+                                Tech: ${data.tech}<br>
+                                <span class="status">Status: Dispatched</span>`;
+            
+            // Add click interaction
+            ticket.onclick = function() {
+                const s = this.dataset.status;
+                if (s === "Dispatched") { this.dataset.status = "In Progress"; }
+                else if (s === "In Progress") { this.dataset.status = "Resolved"; this.style.opacity = "0.5"; }
+                else { this.remove(); }
+                this.querySelector('.status').innerText = "Status: " + this.dataset.status;
+            };
+            
+            document.getElementById('log').prepend(ticket);
+        }
+
+        setInterval(createTicket, 5000);
+    </script>
+</body>
+</html>
